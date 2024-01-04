@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import profileIcon from "../assets/user.png";
 import { BiShow, BiHide } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,7 +12,7 @@ const Login = () => {
     email: "",
     password: ""
   });
-
+const navigate =useNavigate()
   const handleShowPassword = () => {
     setShowPassword((oldVslue) => !oldVslue);
   };
@@ -27,12 +29,32 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
-    const { firstName, email, password, confirmPassword } = data;
+    const {email, password} = data;
     if (email && password) {
-      alert("successful");
+      const fetchData = await fetch(
+        `${process.env.REACT_APP_SERVER_DOMAIN}login`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const resData = await fetchData.json();
+      console.log(resData);
+      toast(resData.message)
+      if(resData.alert){
+        setTimeout(()=>{
+          navigate("/")
+        },1000)
+        
+      }
+
     } else {
       alert("enter required field");
     }

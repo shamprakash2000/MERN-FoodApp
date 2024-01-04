@@ -31,20 +31,33 @@ app.get("/",(req,res)=>{
 })
 
 app.post("/signup",async (req,res)=>{
-    //console.log("body",req.body)
     const {email}=req.body
     const ans=await userModel.findOne({email:email}).exec()
     if(ans===null){
         const data= userModel(req.body)
         const save=data.save()
-        //console.log("save",save);
-        res.send({message:"Successfully signed up"})
+        res.send({message:"Successfully signed up",alert:true})
     }
     else{
-        res.send({message:"email id already exist"})
+        res.send({message:"email id already exist",alert:false})
 
     }
     
+})
+
+app.post("/login",async(req,res)=>{
+
+    console.log(req.body);
+    const {email}=req.body
+    const ans=await userModel.findOne({email:email}).exec()
+    if(ans===null){
+        res.send({message:"Enter proper credentials",alert:false})
+    }
+   
+    else{
+        ans.password=""
+        res.send({message:"Logedin successfully",alert:true,data:ans})
+    }
 })
 
 
