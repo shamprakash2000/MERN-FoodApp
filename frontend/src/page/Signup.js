@@ -37,7 +37,7 @@ const Signup = () => {
   const handleUploadProfileImage = async(e)=>{
     
     const data = await ImageToBase64(e.target.files[0])
-    console.log(data);
+    //console.log(data);
     setData((prev)=>{
         return{
             ...prev,
@@ -46,15 +46,28 @@ const Signup = () => {
         }
     })
   }
+  console.log(process.env.REACT_APP_SERVER_DOMAIN);
 
-  const handleSubmit = (e)=>{
+  const handleSubmit = async(e)=>{
     e.preventDefault()
 
     const {firstName,email,password,confirmPassword} = data
     if(firstName && email && password && confirmPassword){
         if(password===confirmPassword){
-            alert("successful")
-            navigate("/Login")
+          const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}Signup`,{
+          method:"POST",
+          headers: {
+            "content-type":"application/json"
+          },
+          body:JSON.stringify(data)
+
+        })
+
+        const resData = await fetchData.json()
+        console.log(resData);
+
+            alert(resData.message)
+           navigate("/Login")
         }
         else{
             alert("password and confirm password not equal")
