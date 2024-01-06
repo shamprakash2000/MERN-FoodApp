@@ -59,7 +59,6 @@ const handleShowPassword = () => {
         setTimeout(()=>{
           navigate("/")
         },1000)
-        
       }
       console.log("line 64",userData);
 
