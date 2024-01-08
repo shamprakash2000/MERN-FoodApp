@@ -26,6 +26,8 @@ const Header = () => {
     
 
   }
+
+  console.log(process.env.REACT_APP_ADMIN_EMAIL);
   return (
     <header className="fixed shadow-md w-full h-16 px-2 md:px-4 z-50 bg-white" >
       {/* desktop */}
@@ -43,8 +45,6 @@ const Header = () => {
             <Link to={"Menu"}>Menu</Link>
             <Link to={"About"}>About</Link>
             <Link to={"Contact"}>Contact</Link>
-
-           
             
           </nav>
           <div className="text-2xl text-slate-600 relative">
@@ -62,9 +62,13 @@ const Header = () => {
             </div>
             {showMenu && (
               <div className="absolute right-2 bg-white py-2 shadow drop-shadow-md flex flex-col">
-                <Link to={"NewProduct"} className="whitespace-nowrap cursor-pointer px-2">New Product</Link>
+
+                {
+                  userData.email === process.env.REACT_APP_ADMIN_EMAIL && <Link to={"NewProduct"} className="whitespace-nowrap cursor-pointer px-2">New Product</Link>
+                }
+               
                {
-                userData.image? <p className="cursor-pointer px-2 bg-red-300 text-white" onClick={handleLogout}>Logout</p>:<Link to={"Login"} className="whitespace-nowrap cursor-pointer px-2">Login</Link>
+                userData.image? <p className="cursor-pointer px-2 bg-red-300 text-white" onClick={handleLogout}>Logout ({userData.firstName}) </p>:<Link to={"Login"} className="whitespace-nowrap cursor-pointer px-2">Login</Link>
                }
               </div>
             )}
